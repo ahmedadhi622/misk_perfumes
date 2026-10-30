@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MISK - Luxury Perfumes</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #080808;
+            --card-bg: #141414;
+            --gold: #d4af37;
+            --gold-dark: #aa820a;
+            --text-main: #f5f5f5;
+            --text-muted: #999999;
+            --border-color: rgba(212, 175, 55, 0.25);
+            --daraz-orange: #f85606;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            padding-bottom: 5rem;
+            touch-action: manipulation;
+        }
+
+        h1, h2, h3, .brand-title {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Top Bar */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: #111;
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.9rem 1.2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: 6px;
+            color: var(--gold);
+            text-transform: uppercase;
+        }
+
+        .cart-header-icon {
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-color);
+            color: var(--gold);
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .cart-badge-count {
+            position: absolute;
+            top: -3px;
+            right: -3px;
+            background: var(--daraz-orange);
+            color: #fff;
+            font-size: 0.65rem;
+            font-weight: 700;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Feed */
+        .feed-container {
+            max-width: 500px;
+            margin: 5.5rem auto 1rem;
+            padding: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .daraz-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+
+        /* Realistic Bottle Image Area */
+        .daraz-img-area {
+            width: 100%;
+            height: 280px;
+            background: radial-gradient(circle, #222 0%, #0a0a0a 80%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .bottle-art {
+            width: 130px;
+            height: 190px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            filter: drop-shadow(0 10px 15px rgba(212,175,55,0.2));
+        }
+
+        .bottle-cap {
+            width: 50px;
+            height: 30px;
+            background: linear-gradient(135deg, #fff 0%, var(--gold) 100%);
+            border-radius: 4px;
+        }
+
+        .bottle-neck {
+            width: 24px;
+            height: 8px;
+            background: #333;
+        }
+
+        .bottle-main {
+            width: 110px;
+            height: 145px;
+            background: linear-gradient(180deg, #1f1202 0%, #050200 100%);
+            border: 2px solid var(--gold);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .bottle-label {
+            width: 80px;
+            height: 90px;
+            border: 1px solid var(--gold);
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 3px;
+        }
+
+        .lbl-brand { font-family: 'Playfair Display', serif; font-size: 0.75rem; color: var(--gold); letter-spacing: 3px; font-weight: 700; }
+        .lbl-name { font-size: 0.48rem; color: #fff; text-transform: uppercase; margin: 3px 0; }
+        .lbl-vol { font-size: 0.45rem; color: var(--gold); }
+
+        .daraz-details {
+            padding: 1rem;
+        }
+
+        .item-title {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #fff;
+            margin-bottom: 0.2rem;
+        }
+
+        .item-subtitle {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-bottom: 0.8rem;
+        }
+
+        .item-price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .item-price {
+            font-size: 1.35rem;
+            font-family: 'Playfair Display', serif;
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        /* Quantity Box */
+        .daraz-qty-box {
+            display: flex;
+            align-items: center;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            background: rgba(255,255,255,0.03);
+        }
+
+        .d-qty-btn {
+            background: none;
+            border: none;
+            color: var(--gold);
+            width: 32px;
+            height: 32px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            user-select: none;
+        }
+
+        .d-qty-input {
+            width: 30px;
+            background: none;
+            border: none;
+            color: #fff;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        /* Buttons Row */
+        .daraz-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+
+        .btn-daraz-cart {
+            flex: 1;
+            background: #222;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 0.75rem 0.5rem;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+            user-select: none;
+        }
+
+        .btn-daraz-buynow {
+            flex: 1;
+            background: var(--daraz-orange);
+            border: none;
+            color: #fff;
+            padding: 0.75rem 0.5rem;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+            user-select: none;
+        }
+
+        /* Toast */
+        .toast-msg {
+            position: fixed;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gold);
+            color: #000;
+            padding: 0.7rem 1.4rem;
+            border-radius: 20px;
+            font-size: 0.82rem;
+            font-weight: 700;
+            display: none;
+            z-index: 4000;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.6);
+        }
+
+        /* Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.85);
+            z-index: 3000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .modal-overlay.active { display: flex; }
+
+        .modal-box {
+            background: #111;
+            border: 1px solid var(--gold);
+            width: 100%;
+            max-width: 400px;
+            border-radius: 12px;
+            padding: 1.2rem;
+            max-height: 85vh;
+            overflow-y: auto;
+        }
+
+        .modal-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 0.6rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .modal-top h3 { color: var(--gold); font-size: 1.2rem; }
+
+        .modal-close { background: none; border: none; color: #fff; font-size: 1.6rem; cursor: pointer; padding: 0 5px; }
+
+        .cart-item-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255,255,255,0.03);
+            padding: 0.6rem;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .f-group { margin-bottom: 0.7rem; }
+        .f-group label { display: block; font-size: 0.7rem; color: var(--text-muted); margin-bottom: 0.2rem; text-transform: uppercase; }
+        .f-group input, .f-group textarea {
+            width: 100%;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border-color);
+            padding: 0.6rem;
+            border-radius: 6px;
+            color: #fff;
+            font-size: 0.85rem;
+            font-family: inherit;
+        }
+        .f-group textarea { height: 55px; resize: none; }
+
+        .cod-tag {
+            background: rgba(212,175,55,0.08);
+            border: 1px solid var(--border-color);
+            padding: 0.6rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: var(--text-main);
+            margin-bottom: 0.8rem;
+        }
+
+        .btn-checkout-wa {
+            background: #25d366;
+            color: #fff;
+            border: none;
+            padding: 0.85rem;
+            border-radius: 6px;
+            font-weight: 700;
+            text-transform: uppercase;
+            width: 100%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <h1 class="brand-title">MISK</h1>
+        <div class="cart-header-icon" id="cartOpenBtn">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span class="cart-badge-count" id="badgeCount">0</span>
+        </div>
+    </header>
+
+    <div class="toast-msg" id="toastMsg">Added to Bag!</div>
+
+    <!-- Products Feed -->
+    <main class="feed-container">
+
+        <!-- Product 1: Oud Bomb -->
+        <div class="daraz-card">
+            <div class="daraz-img-area">
+                <div class="bottle-art">
+                    <div class="bottle-cap"></div>
+                    <div class="bottle-neck"></div>
+                    <div class="bottle-main">
+                        <div class="bottle-label">
+                            <span class="lbl-brand">MISK</span>
+                            <span class="lbl-name">Oud Bomb</span>
+                            <span class="lbl-vol">50 ML</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="daraz-details">
+                <h3 class="item-title">Oud Bomb (50 ML)</h3>
+                <p class="item-subtitle">Rich smoky Cambodian agarwood, saffron & vanilla notes.</p>
+                
+                <div class="item-price-row">
+                    <div class="item-price" id="price_p1">Rs. 1,999</div>
+                    <div class="daraz-qty-box">
+                        <button type="button" class="d-qty-btn btn-qty-minus" data-key="p1" data-base="1999">-</button>
+                        <input type="text" id="qty_p1" class="d-qty-input" value="1" readonly>
+                        <button type="button" class="d-qty-btn btn-qty-plus" data-key="p1" data-base="1999">+</button>
+                    </div>
+                </div>
+
+                <div class="daraz-actions">
+                    <button type="button" class="btn-daraz-cart btn-add-cart" data-name="Oud Bomb (50 ML)" data-price="1999" data-qty="qty_p1"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
+                    <button type="button" class="btn-daraz-buynow btn-buy-now" data-name="Oud Bomb (50 ML)" data-price="1999" data-qty="qty_p1">Buy Now</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product 2: Royal Oud -->
+        <div class="daraz-card">
+            <div class="daraz-img-area">
+                <div class="bottle-art">
+                    <div class="bottle-cap" style="border-radius: 8px 8px 2px 2px;"></div>
+                    <div class="bottle-neck"></div>
+                    <div class="bottle-main" style="border-radius: 10px;">
+                        <div class="bottle-label">
+                            <span class="lbl-brand">MISK</span>
+                            <span class="lbl-name">Royal Oud</span>
+                            <span class="lbl-vol">50 ML</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="daraz-details">
+                <h3 class="item-title">Royal Oud (50 ML)</h3>
+                <p class="item-subtitle">Aged Indian oudh, warm cedarwood and rose formulation.</p>
+                
+                <div class="item-price-row">
+                    <div class="item-price" id="price_p2">Rs. 1,999</div>
+                    <div class="daraz-qty-box">
+                        <button type="button" class="d-qty-btn btn-qty-minus" data-key="p2" data-base="1999">-</button>
+                        <input type="text" id="qty_p2" class="d-qty-input" value="1" readonly>
+                        <button type="button" class="d-qty-btn btn-qty-plus" data-key="p2" data-base="1999">+</button>
+                    </div>
+                </div>
+
+                <div class="daraz-actions">
+                    <button type="button" class="btn-daraz-cart btn-add-cart" data-name="Royal Oud (50 ML)" data-price="1999" data-qty="qty_p2"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
+                    <button type="button" class="btn-daraz-buynow btn-buy-now" data-name="Royal Oud (50 ML)" data-price="1999" data-qty="qty_p2">Buy Now</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product 3: Midnight Musk -->
+        <div class="daraz-card">
+            <div class="daraz-img-area">
+                <div class="bottle-art">
+                    <div class="bottle-cap" style="clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);"></div>
+                    <div class="bottle-neck"></div>
+                    <div class="bottle-main" style="clip-path: polygon(15% 0%, 85% 0%, 100% 100%, 0% 100%);">
+                        <div class="bottle-label">
+                            <span class="lbl-brand">MISK</span>
+                            <span class="lbl-name">Midnight Musk</span>
+                            <span class="lbl-vol">50 ML</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="daraz-details">
+                <h3 class="item-title">Midnight Musk (50 ML)</h3>
+                <p class="item-subtitle">Pure intense musk infused with jasmine and sandalwood.</p>
+                
+                <div class="item-price-row">
+                    <div class="item-price" id="price_p3">Rs. 1,999</div>
+                    <div class="daraz-qty-box">
+                        <button type="button" class="d-qty-btn btn-qty-minus" data-key="p3" data-base="1999">-</button>
+                        <input type="text" id="qty_p3" class="d-qty-input" value="1" readonly>
+                        <button type="button" class="d-qty-btn btn-qty-plus" data-key="p3" data-base="1999">+</button>
+                    </div>
+                </div>
+
+                <div class="daraz-actions">
+                    <button type="button" class="btn-daraz-cart btn-add-cart" data-name="Midnight Musk (50 ML)" data-price="1999" data-qty="qty_p3"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
+                    <button type="button" class="btn-daraz-buynow btn-buy-now" data-name="Midnight Musk (50 ML)" data-price="1999" data-qty="qty_p3">Buy Now</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product 4: Blue Sea -->
+        <div class="daraz-card">
+            <div class="daraz-img-area" style="background: radial-gradient(circle, #00223e 0%, #030b14 80%);">
+                <div class="bottle-art">
+                    <div class="bottle-cap" style="background: linear-gradient(135deg, #e0f7fa 0%, #00838f 100%);"></div>
+                    <div class="bottle-neck"></div>
+                    <div class="bottle-main" style="background: linear-gradient(180deg, #003366 0%, #001020 100%); border-color: #00bcd4;">
+                        <div class="bottle-label" style="border-color: #00bcd4;">
+                            <span class="lbl-brand" style="color: #00bcd4;">MISK</span>
+                            <span class="lbl-name">Blue Sea</span>
+                            <span class="lbl-vol" style="color: #00bcd4;">50 ML</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="daraz-details">
+                <h3 class="item-title">Blue Sea (50 ML)</h3>
+                <p class="item-subtitle">Refreshing ocean breeze with aquatic notes, amber & citrus zest.</p>
+                
+                <div class="item-price-row">
+                    <div class="item-price" id="price_p4">Rs. 1,999</div>
+                    <div class="daraz-qty-box">
+                        <button type="button" class="d-qty-btn btn-qty-minus" data-key="p4" data-base="1999">-</button>
+                        <input type="text" id="qty_p4" class="d-qty-input" value="1" readonly>
+                        <button type="button" class="d-qty-btn btn-qty-plus" data-key="p4" data-base="1999">+</button>
+                    </div>
+                </div>
+
+                <div class="daraz-actions">
+                    <button type="button" class="btn-daraz-cart btn-add-cart" data-name="Blue Sea (50 ML)" data-price="1999" data-qty="qty_p4"><i class="fa-solid fa-cart-plus"></i> Add to Cart</button>
+                    <button type="button" class="btn-daraz-buynow btn-buy-now" data-name="Blue Sea (50 ML)" data-price="1999" data-qty="qty_p4">Buy Now</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Cart Modal -->
+    <div class="modal-overlay" id="cartModal">
+        <div class="modal-box">
+            <div class="modal-top">
+                <h3>My Shopping Bag</h3>
+                <button type="button" class="modal-close" id="cartCloseBtn">&times;</button>
+            </div>
+
+            <div id="cartItemsContainer" style="max-height:180px; overflow-y:auto; margin-bottom:0.8rem;">
+                <p style="color:var(--text-muted); text-align:center; margin-top:1rem;">Cart is empty</p>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; font-weight:700; margin-bottom:0.8rem; border-top:1px solid var(--border-color); padding-top:0.6rem;">
+                <span>Total:</span>
+                <span id="cartSumPrice" style="color:var(--gold);">Rs. 0</span>
+            </div>
+
+            <div class="f-group">
+                <label>Full Name</label>
+                <input type="text" id="cName" placeholder="Enter your name">
+            </div>
+            <div class="f-group">
+                <label>Phone Number</label>
+                <input type="tel" id="cPhone" placeholder="03XXXXXXXXX">
+            </div>
+            <div class="f-group">
+                <label>Delivery Address</label>
+                <textarea id="cAddress" placeholder="House #, Street, City..."></textarea>
+            </div>
+
+            <div class="cod-tag">
+                <i class="fa-solid fa-circle-check" style="color:var(--gold);"></i> Cash on Delivery (COD) Available
+            </div>
+
+            <button type="button" class="btn-checkout-wa" id="waConfirmBtn">
+                <i class="fa-brands fa-whatsapp"></i> Confirm Order via WhatsApp
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var cartStore = [];
+
+            var modal = document.getElementById('cartModal');
+            var cartOpenBtn = document.getElementById('cartOpenBtn');
+            var cartCloseBtn = document.getElementById('cartCloseBtn');
+            var toast = document.getElementById('toastMsg');
+            var waConfirmBtn = document.getElementById('waConfirmBtn');
+
+            function openCart() { modal.classList.add('active'); }
+            function closeCart() { modal.classList.remove('active'); }
+
+            cartOpenBtn.addEventListener('click', openCart);
+            cartCloseBtn.addEventListener('click', closeCart);
+
+            function showToast(txt) {
+                toast.innerText = txt;
+                toast.style.display = 'block';
+                setTimeout(function() { toast.style.display = 'none'; }, 1800);
+            }
+
+            // Quantity Plus Buttons
+            document.querySelectorAll('.btn-qty-plus').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var key = this.getAttribute('data-key');
+                    var base = parseInt(this.getAttribute('data-base'));
+                    var input = document.getElementById('qty_' + key);
+                    var priceDisp = document.getElementById('price_' + key);
+                    var cur = parseInt(input.value) || 1;
+                    var next = cur + 1;
+                    input.value = next;
+                    priceDisp.innerText = 'Rs. ' + (base * next).toLocaleString();
+                });
+            });
+
+            // Quantity Minus Buttons
+            document.querySelectorAll('.btn-qty-minus').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var key = this.getAttribute('data-key');
+                    var base = parseInt(this.getAttribute('data-base'));
+                    var input = document.getElementById('qty_' + key);
+                    var priceDisp = document.getElementById('price_' + key);
+                    var cur = parseInt(input.value) || 1;
+                    var next = cur - 1;
+                    if (next >= 1) {
+                        input.value = next;
+                        priceDisp.innerText = 'Rs. ' + (base * next).toLocaleString();
+                    }
+                });
+            });
+
+            // Add to Cart
+            document.querySelectorAll('.btn-add-cart').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var name = this.getAttribute('data-name');
+                    var price = parseInt(this.getAttribute('data-price'));
+                    var qtyId = this.getAttribute('data-qty');
+                    var qty = parseInt(document.getElementById(qtyId).value) || 1;
+
+                    var found = false;
+                    for (var i = 0; i < cartStore.length; i++) {
+                        if (cartStore[i].name === name) {
+                            cartStore[i].qty += qty;
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        cartStore.push({ name: name, price: price, qty: qty });
+                    }
+
+                    refreshCartUI();
+                    showToast('Added to Bag!');
+                });
+            });
+
+            // Buy Now
+            document.querySelectorAll('.btn-buy-now').forEach(function(btn) {
+                btn.addEventListener('click', function() {
+                    var name = this.getAttribute('data-name');
+                    var price = parseInt(this.getAttribute('data-price'));
+                    var qtyId = this.getAttribute('data-qty');
+                    var qty = parseInt(document.getElementById(qtyId).value) || 1;
+
+                    cartStore = [{ name: name, price: price, qty: qty }];
+                    refreshCartUI();
+                    openCart();
+                });
+            });
+
+            // Cart Refresh & Management
+            function refreshCartUI() {
+                var container = document.getElementById('cartItemsContainer');
+                var badge = document.getElementById('badgeCount');
+                var sumDisplay = document.getElementById('cartSumPrice');
+
+                var totalAmount = 0;
+                var totalCount = 0;
+
+                if (cartStore.length === 0) {
+                    container.innerHTML = '<p style="color:var(--text-muted); text-align:center; margin-top:1rem;">Cart is empty</p>';
+                } else {
+                    var html = '';
+                    for (var i = 0; i < cartStore.length; i++) {
+                        var prod = cartStore[i];
+                        totalAmount += prod.price * prod.qty;
+                        totalCount += prod.qty;
+
+                        html += '<div class="cart-item-row">' +
+                            '<div>' +
+                                '<h4 style="font-size:0.85rem; color:#fff;">' + prod.name + '</h4>' +
+                                '<p style="color:var(--gold); font-size:0.75rem;">Rs. ' + (prod.price * prod.qty).toLocaleString() + '</p>' +
+                            '</div>' +
+                            '<div style="display:flex; align-items:center; gap:0.4rem;">' +
+                                '<div class="daraz-qty-box">' +
+                                    '<button type="button" class="d-qty-btn cart-qty-sub" data-idx="' + i + '" style="width:24px; height:24px; font-size:0.8rem;">-</button>' +
+                                    '<span style="color:#fff; padding:0 6px; font-size:0.8rem;">' + prod.qty + '</span>' +
+                                    '<button type="button" class="d-qty-btn cart-qty-add" data-idx="' + i + '" style="width:24px; height:24px; font-size:0.8rem;">+</button>' +
+                                '</div>' +
+                                '<button type="button" class="cart-item-del" data-idx="' + i + '" style="background:none; border:none; color:#ff4d4d; cursor:pointer; font-size:1rem; padding:2px;"><i class="fa-solid fa-trash"></i></button>' +
+                            '</div>' +
+                        '</div>';
+                    }
+                    container.innerHTML = html;
+
+                    container.querySelectorAll('.cart-qty-add').forEach(function(b) {
+                        b.addEventListener('click', function() {
+                            var idx = parseInt(this.getAttribute('data-idx'));
+                            cartStore[idx].qty += 1;
+                            refreshCartUI();
+                        });
+                    });
+
+                    container.querySelectorAll('.cart-qty-sub').forEach(function(b) {
+                        b.addEventListener('click', function() {
+                            var idx = parseInt(this.getAttribute('data-idx'));
+                            cartStore[idx].qty -= 1;
+                            if (cartStore[idx].qty <= 0) {
+                                cartStore.splice(idx, 1);
+                            }
+                            refreshCartUI();
+                        });
+                    });
+
+                    container.querySelectorAll('.cart-item-del').forEach(function(b) {
+                        b.addEventListener('click', function() {
+                            var idx = parseInt(this.getAttribute('data-idx'));
+                            cartStore.splice(idx, 1);
+                            refreshCartUI();
+                        });
+                    });
+                }
+
+                badge.innerText = totalCount;
+                sumDisplay.innerText = 'Rs. ' + totalAmount.toLocaleString();
+            }
+
+            // WhatsApp Order Submission
+            waConfirmBtn.addEventListener('click', function() {
+                if (cartStore.length === 0) {
+                    alert('Your cart is empty!');
+                    return;
+                }
+
+                var name = document.getElementById('cName').value.trim();
+                var phone = document.getElementById('cPhone').value.trim();
+                var address = document.getElementById('cAddress').value.trim();
+
+                if (!name || !phone || !address) {
+                    alert('Please enter your Name, Phone Number and Address!');
+                    return;
+                }
+
+                var msg = "New Order from MISK Store!\n\n";
+                msg += "Customer Info:\n";
+                msg += "- Name: " + name + "\n";
+                msg += "- Phone: " + phone + "\n";
+                msg += "- Address: " + address + "\n\n";
+                msg += "Items Ordered:\n";
+
+                var totalSum = 0;
+                for (var i = 0; i < cartStore.length; i++) {
+                    msg += "- " + cartStore[i].name + " (x" + cartStore[i].qty + ") : Rs. " + (cartStore[i].price * cartStore[i].qty).toLocaleString() + "\n";
+                    totalSum += cartStore[i].price * cartStore[i].qty;
+                }
+
+                msg += "\nTotal Bill: Rs. " + totalSum.toLocaleString();
+                msg += "\nPayment Method: Cash on Delivery (COD)";
+
+                var waLink = 'https://wa.me/923098188750?text=' + encodeURIComponent(msg);
+                window.location.href = waLink;
+            });
+        });
+    </script>
+</body>
+</html>
